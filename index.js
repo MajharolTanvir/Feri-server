@@ -1,14 +1,14 @@
-const express = require("express");
-const app = express();
-var cors = require("cors");
+const app = require('./app');
+const database = require('./Database/mongooseDatabase')
 const port = process.env.PORT || 5000;
-
-// Middle wear
-app.use(express.json());
-app.use(cors());
-
-app.get("/", (req, res) => {
-  res.send("Hello World!");
+const cloudinary = require("cloudinary").v2;
+require("dotenv").config();
+// database or pictue uplode server configration
+database()
+cloudinary.config({
+  cloud_name: process.env.CLOUDINARY_NAME,
+  api_key: process.env.CLOUDINARY_API_KEY,
+  api_secret: process.env.CLOUDINARY_API_SECRET,
 });
 
 app.listen(port, () => {
