@@ -11,7 +11,9 @@ app.use(express.static("public"));
 
 // All Routes here
 const productRouter = require("./Router/productRoute")
+const userRouter = require("./Router/userRoute")
 app.use("/api/v1/product" , productRouter)
+app.use("/api/v1/user" , userRouter)
 
 
 
