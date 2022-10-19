@@ -9,6 +9,7 @@ exports.uplodeProduct = async (req, res, next) => {
   //     });
 
   const { name, description, price, category, Stock, user } = req.body;
+
   const proudcts = await ProductDB.create({
     name,
     description,
@@ -85,7 +86,7 @@ exports.addProductReview = async (req , res, next)=>{
               comment,
               time
             };
-            console.log(req.body);
+       
             
             product.reviews.push(review)
             product.numOfReviews = product.reviews.length;
@@ -99,5 +100,53 @@ exports.addProductReview = async (req , res, next)=>{
             console.log(e);
       }
      
+
+}
+
+
+// add product offer 
+exports.addOfferToPrice = async (req , res, next)=>{
+  const product = await ProductDB.findById(req.params.id)
+  const {banner , discountPrice, title} = req.body
+  if(!product){
+    res.status(404).json({success:false , message: "product not found"})
+  }
+  const offers = {
+    banner: {
+      public_id: "xxx",
+      url: "xxx",
+    },
+    discountPrice,
+    title
+  }
+  product.offerDetails.push(offers)
+  product.offer = true
+ await product.save({ validateBeforeSave: false })
+
+  res.json({success: true, message: "Proudct Offer Added Success"})
+
+}
+
+
+// get offer product 
+exports.getofferProudct = async (req , res, next)=>{
+  const offerProducted = await ProductDB.find({offer: true})
+  res.json({success: true, product: offerProducted})
+}
+
+// delete offer 
+exports.deletedOfferByProduct = async (req , res, next)=>{
+  const {productId, offerObjectId} = req.query
+  console.log(productId, offerObjectId);
+  const product = await ProductDB.findById(productId)
+  if(!product){
+    res.status(404).json({success:false , message: "product not found"})
+  }
+  const currentOffer = product.offerDetails.filter((pro)=> pro._id != offerObjectId)
+  console.log(currentOffer)
+  // product.offerDetails.push(currentOffer)
+  product.offerDetails = currentOffer
+  await product.save({ validateBeforeSave: false })
+  res.json({success: true, message: "Offer delete successfull"})
 
 }

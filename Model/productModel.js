@@ -19,6 +19,11 @@ const productShema = new mongoose.Schema({
     type: Number,
     default: 0,
   },
+  offer:{
+    type: Boolean,
+    default : false
+
+  },
   images: [
     {
       public_id: {
@@ -66,6 +71,30 @@ const productShema = new mongoose.Schema({
         required: true,
       },
     },
+  ],
+
+  offerDetails:[
+    {
+      banner:{
+        public_id: {
+          type: String,
+          required: true,
+        },
+        url: {
+          type: String,
+          required: true,
+        },
+      },
+      title:{
+        type: String,
+          required: true,
+      },
+      discountPrice:{
+        type: String,
+        required: true,
+
+      }
+    }
   ],
   // product ta je uplode korse ta callect korar jonno
   // user: {
